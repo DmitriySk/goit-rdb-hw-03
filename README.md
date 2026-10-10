@@ -1,5 +1,7 @@
 # goit-rdb-hw-03 — NYC TLC Yellow Taxi у PostgreSQL
 
+Домашнє завдання до Теми 3: завантаження даних у PostgreSQL (staging → clean), аудит якості та EDA на SQL.
+
 ## Датасет
 
 - **Назва:** NYC TLC Yellow Taxi Trip Records, липень 2026 + довідник зон Taxi Zone Lookup.
@@ -9,11 +11,10 @@
 
 ## Формування вибірки
 
-1. Ноутбук сам завантажує місячний Parquet і довідник зон (весь рік не завантажується).
+1. Ноутбук сам завантажує місячний Parquet і довідник зон у теку `data/` (весь рік не завантажується).
 2. З Parquet беруться 21 колонка і **100 000** випадкових рядків
    (`pandas.DataFrame.sample(n=100_000, random_state=42)`, у порядку файлу).
-3. Вибірка зберігається в CSV `data/yellow_tripdata_2026-07_sample.csv` (у репозиторії, разом із `data/taxi_zone_lookup.csv`;
-   Parquet у git не зберігається) і завантажується в PostgreSQL через `COPY FROM STDIN`.
+3. Вибірка зберігається в `data/yellow_tripdata_2026-07_sample.csv` і завантажується в PostgreSQL через `COPY FROM STDIN`.
 
 | таблиця | рядків |
 |---|---|
@@ -21,10 +22,34 @@
 | `hw3_taxi_trips` (типізовані поїздки) | 100 000 |
 | `hw3_taxi_zones_staging` / `hw3_taxi_zones` | 265 |
 
+## Структура репозиторію
+
+```
+dz_topic_3_Skalskyi.ipynb               ноутбук з output клітинок
+data/yellow_tripdata_2026-07_sample.csv вибірка 100 000 поїздок (≈ 11 МБ)
+data/taxi_zone_lookup.csv               довідник зон
+requirements.txt                        залежності для локального запуску
+```
+
+Parquet (≈ 62 МБ) у репозиторій не входить — ноутбук завантажує його з офіційного сайту.
+Вибірка відтворювана: при повторному запуску з тим самим `random_state` CSV виходить таким самим.
+
 ## Запуск
 
-Відкрийте `dz_topic_3_Skalskyi.ipynb` у Google Colab і виконайте **Runtime → Restart and run all**.
-PostgreSQL запускається всередині ноутбука через `pgserver`; залежності ставить перша кодова клітинка.
+**Google Colab:** відкрийте `dz_topic_3_Skalskyi.ipynb` і виконайте **Runtime → Restart and run all**.
+Залежності ставить перша кодова клітинка, PostgreSQL запускається всередині ноутбука через `pgserver`.
+
+**Локально:**
+
+```bash
+python -m venv .venv
+.venv\Scripts\activate        # Linux/macOS: source .venv/bin/activate
+pip install -r requirements.txt
+jupyter notebook dz_topic_3_Skalskyi.ipynb
+```
+
+Дані Postgres зберігаються в теці `pgdata/` (у git не входить). На Windows ноутбук сам докладає
+tz-базу з пакета `tzdata`, бо збірка `pgserver` її не містить.
 
 ## Структура ноутбука
 

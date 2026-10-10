@@ -222,3 +222,4 @@ pgdata/
 
 # HW3: Parquet завантажується ноутбуком
 data/*.parquet
+/.idea
