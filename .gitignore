@@ -216,3 +216,9 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Local Postgres cluster created by the notebook (pgserver)
+pgdata/
+
+# HW3: Parquet завантажується ноутбуком
+data/*.parquet

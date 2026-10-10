@@ -12,7 +12,8 @@
 1. Ноутбук сам завантажує місячний Parquet і довідник зон (весь рік не завантажується).
 2. З Parquet беруться 21 колонка і **100 000** випадкових рядків
    (`pandas.DataFrame.sample(n=100_000, random_state=42)`, у порядку файлу).
-3. Вибірка зберігається в CSV `yellow_tripdata_2026-07_sample.csv` і завантажується в PostgreSQL через `COPY FROM STDIN`.
+3. Вибірка зберігається в CSV `data/yellow_tripdata_2026-07_sample.csv` (у репозиторії, разом із `data/taxi_zone_lookup.csv`;
+   Parquet у git не зберігається) і завантажується в PostgreSQL через `COPY FROM STDIN`.
 
 | таблиця | рядків |
 |---|---|
@@ -30,6 +31,6 @@ PostgreSQL запускається всередині ноутбука чере
 1. Setup і завантаження: pgserver, Parquet → CSV, staging-таблиці, `COPY FROM STDIN`.
 2. Staging і DDL: типізована таблиця з PK, `NOT NULL`, `CHECK`, FK; обґрунтування типів колонок.
 3. Data-quality audit: кількість рядків, дублікати, null-rate і спеціальні маркери, прапорці якості.
-4. Розподіли та аномалії: категорії, числова статистика, правило 3σ та доменна перевірка.
-5. 12 DQL/EDA-запитів у форматі Business-question → SQL → Interpretation.
+4. Розподіли та аномалії: розподіл `payment_type`, статистика `fare_amount`, правило 3σ та доменна перевірка.
+5. 10 DQL/EDA-запитів у форматі Business-question → SQL → Interpretation.
 6. Reflection.
